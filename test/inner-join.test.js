@@ -30,7 +30,7 @@ const rightArray = [
     { name: "Aaron", age: 30, id: 3, enail: "aaron@notreal.com", confirmed: true },
 ];
 
-const innerJoin = ({leftArray, rightArray}) => {
+const innerJoin = ({leftArray, rightArray, key}) => {
     // Validate leftArray
     if (!Array.isArray(leftArray)) {
         throw new TypeError("leftArray must be a valid array");
@@ -46,6 +46,8 @@ const innerJoin = ({leftArray, rightArray}) => {
         throw new TypeError("key must be a non-empty string");
     }
 
+    return [];
+
 };
 
 describe("innerJoin", () => {
@@ -58,5 +60,14 @@ describe("innerJoin", () => {
         expect(() => innerJoin({ leftArray, rightArray: undefined, key: "id" })).toThrow();
         expect(() => innerJoin({ leftArray, rightArray, key: 123 })).toThrow();
         expect(() => innerJoin({ leftArray, rightArray, key: "" })).toThrow();
+    });
+
+    it("returns [] when there are no matches", () => {
+        const res = innerJoin({
+            leftArray,
+            rightArray,
+            key: "phone", // no shared values for phone
+        });
+        expect(res).toEqual([]);
     });
 })
