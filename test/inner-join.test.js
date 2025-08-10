@@ -1,75 +1,6 @@
 import { describe, expect, it } from "vitest";
-/*
-* Implement the `innerJoin` function.
-*
-* Given two arrays of objects (`leftArray` and `rightArray`) and a shared key:
-* - Return only objects where the key value exists in both arrays (inner join).
-* - null/undefined arrays or non-string/empty key → throw a helpful error.
-* - Missing `key` in an item → treat as non-match.
-* - No matches → return [].
-* - Merge the matching objects. If a property exists in both, keep the value from `rightArray`.
-* - Do not modify the original arrays.
-*/
+import { innerJoin, leftArray, rightArray } from "../src/inner-join";
 
-const leftArray = [
-    { name: "Maggie", age: 14, id: 0, phone: "+123456" },
-    { name: "Joseph", age: 24, id: 1, phone: "+145454" },
-    { name: "Margaret", age: 11, id: 2, phone: "+125556" },
-    { name: "Elizabeth", age: 61, id: 3, phone: "+765756" },
-    { name: "Julio", age: 24, id: 4, phone: "+165756" },
-    { name: "Kevin", age: 64, id: 5, phone: "+888856" },
-    { name: "Martin", age: 71, id: 6, phone: "+12323456" },
-    { name: "Aaron", age: 30, id: 7, phone: "+12434343" },
-];
-
-const rightArray = [
-    { name: "Aaron", age: 30, id: 300, email: "aaron@notreal.com", confirmed: true },
-    { name: "Maggie", age: 14, id: 0, email: "maggie@notreal.com", confirmed: true },
-    { name: "Elizabeth", age: 61, id: 1, email: "elizabeth@notreal.com", confirmed: false },
-    { name: "Martin", age: 71, id: 2, email: "martin@notreal.com", confirmed: false },
-    { name: "Aaron", age: 30, id: 3, email: "aaron@notreal.com", confirmed: true },
-];
-
-const innerJoin = ({leftArray, rightArray, key}) => {
-    // Validate leftArray
-    if (!Array.isArray(leftArray)) {
-        throw new TypeError("leftArray must be a valid array");
-    }
-
-    // Validate rightArray
-    if (!Array.isArray(rightArray)) {
-        throw new TypeError("rightArray must be a valid array");
-    }
-
-    // Validate key
-    if (typeof key !== "string" || key.trim() === "") {
-        throw new TypeError("key must be a non-empty string");
-    }
-
-    const hasLeftArrayKey = leftArray.some((left) => Object.hasOwnProperty.call(left, key));
-    const hasRightArrayKey = rightArray.some((right) => Object.hasOwnProperty.call(right, key));
-
-    if (!hasLeftArrayKey || !hasRightArrayKey) {
-        return [];
-    }
-
-    const leftMap = new Map(
-        leftArray
-            .filter(Boolean)
-            .map(item => [item[key], item])
-    );
-
-    return rightArray
-        .filter(Boolean)
-        .reduce((acc, rightItem) => {
-            const leftItem = leftMap.get(rightItem[key]);
-            if (leftItem) {
-                acc.push({ ...leftItem, ...rightItem });
-            }
-            return acc;
-        }, []);
-
-};
 
 describe("innerJoin", () => {
     it('should be a function', () => {
@@ -138,5 +69,4 @@ describe("innerJoin", () => {
         const res = innerJoin({ leftArray: l, rightArray: r, key: "id" });
         expect(res).toEqual([{ id: 1, a: 1, b: 1 }]);
     });
-
-})
+});
