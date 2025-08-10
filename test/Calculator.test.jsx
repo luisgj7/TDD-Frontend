@@ -1,7 +1,7 @@
 import { afterEach, beforeEach, describe, it, expect } from "vitest";
 import { render, screen, cleanup } from "@testing-library/react";
 import { userEvent } from "@testing-library/user-event";
-import { Calculator, equalSign, operations } from "../src/Calculator";
+import { Calculator, operations } from "../src/calculator/Calculator";
 
 
 describe('calculator', () => {
@@ -48,7 +48,7 @@ describe('calculator', () => {
     it('should user input after clicking a number', async () => {
         render(<Calculator/>);
 
-        await user.click(screen.getByRole('button', { name: '1' }));
+        await user.click(screen.getByRole('button', { name: 'digit 1' }));
 
         const input = screen.getByRole('textbox');
         expect(input.value).toBe('1');
@@ -57,9 +57,9 @@ describe('calculator', () => {
     it('should user input after clicking a several numbers', async () => {
         render(<Calculator/>);
 
-        await user.click(screen.getByRole('button', { name: '1' }));
-        await user.click(screen.getByRole('button', { name: '2' }));
-        await user.click(screen.getByRole('button', { name: '3' }));
+        await user.click(screen.getByRole('button', { name: 'digit 1' }));
+        await user.click(screen.getByRole('button', { name: 'digit 2' }));
+        await user.click(screen.getByRole('button', { name: 'digit 3' }));
 
 
         const input = screen.getByRole('textbox');
@@ -69,9 +69,9 @@ describe('calculator', () => {
     it('should user input after clicking numbers and operations', async () => {
         render(<Calculator/>);
 
-        await user.click(screen.getByRole('button', { name: '1' }));
-        await user.click(screen.getByRole('button', { name: '+' }));
-        await user.click(screen.getByRole('button', { name: '1' }));
+        await user.click(screen.getByRole('button', { name: 'digit 1' }));
+        await user.click(screen.getByRole('button', { name: 'operator +' }));
+        await user.click(screen.getByRole('button', { name: 'digit 1' }));
 
         const input = screen.getByRole('textbox');
         expect(input.value).toBe('1+1');
@@ -80,12 +80,62 @@ describe('calculator', () => {
     it('should calculate based on user input and show the calc result', async () => {
         render(<Calculator/>);
 
-        await user.click(screen.getByRole('button', { name: '1' }));
-        await user.click(screen.getByRole('button', { name: '+' }));
-        await user.click(screen.getByRole('button', { name: '1' }));
-        await user.click(screen.getByRole('button', { name: equalSign }));
+        await user.click(screen.getByRole('button', { name: 'digit 1' }));
+        await user.click(screen.getByRole('button', { name: 'operator +' }));
+        await user.click(screen.getByRole('button', { name: 'digit 1' }));
+        await user.click(screen.getByRole('button', { name: 'equals' }));
 
         const input = screen.getByRole('textbox');
         expect(input.value).toBe('2');
+    });
+
+    it('should clear error when clicking a number after an error', async () => {
+        render(<Calculator />);
+
+        await user.click(screen.getByRole('button', { name: 'operator +' }));
+        await user.click(screen.getByRole('button', { name: 'equals' }));
+        expect(screen.getByRole('textbox').value).toBe('Invalid expression');
+
+        await user.click(screen.getByRole('button', { name: 'digit 1' }));
+        expect(screen.getByRole('textbox').value).toBe('1');
+    });
+
+    it('should clear error when clicking AC', async () => {
+        render(<Calculator />);
+
+        await user.click(screen.getByRole('button', { name: 'operator +' }));
+        await user.click(screen.getByRole('button', { name: 'equals' }));
+        expect(screen.getByRole('textbox').value).toBe('Invalid expression');
+
+        await user.click(screen.getByRole('button', { name: 'clear all' }));
+        expect(screen.getByRole('textbox').value).toBe('');
+    });
+
+    it('should clear error when clicking DEL', async () => {
+        render(<Calculator />);
+
+        await user.click(screen.getByRole('button', { name: 'operator +' }));
+        await user.click(screen.getByRole('button', { name: 'equals' }));
+        expect(screen.getByRole('textbox').value).toBe('Invalid expression');
+
+        await user.click(screen.getByRole('button', { name: 'delete' }));
+        expect(screen.getByRole('textbox').value).toBe('');
+    });
+
+    it('should show error on invalid expression', async () => {
+        render(<Calculator />);
+
+        await user.click(screen.getByRole('button', { name: 'digit 1' }));
+        await user.click(screen.getByRole('button', { name: 'operator /' }));
+        await user.click(screen.getByRole('button', { name: 'operator /' })); // inválido
+        await user.click(screen.getByRole('button', { name: 'equals' }));
+
+        expect(screen.getByRole('textbox').value).toBe('Invalid expression');
+    });
+
+    it('should not change value when equals is pressed with empty input', async () => {
+        render(<Calculator />);
+        await user.click(screen.getByRole('button', { name: 'equals' }));
+        expect(screen.getByRole('textbox').value).toBe('');
     });
 });

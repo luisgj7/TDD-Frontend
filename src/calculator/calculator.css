@@ -1,0 +1,133 @@
+.calc {
+    max-width: clamp(320px, 90vw, 380px);
+    margin: clamp(2rem, 6vh, 6rem) auto;
+    padding: clamp(1rem, 2.5vw, 1.25rem);
+    background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 16px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 10px 40px rgba(0,0,0,.35);
+}
+
+.calc__title {
+    margin: 0 0 1rem;
+    font-weight: 700;
+    letter-spacing: .5px;
+    text-align: center;
+}
+
+.calc__display {
+    background: var(--panel);
+    border-radius: 12px;
+    padding: .75rem;
+    border: 1px solid rgba(255,255,255,.06);
+    margin-bottom: 1rem;
+}
+
+.calc__display--error {
+    border-color: rgba(239,68,68,.6);
+    box-shadow: 0 0 0 4px rgba(239,68,68,.15);
+}
+
+.calc__input {
+    width: 100%;
+    background: transparent;
+    border: none;
+    color: var(--text);
+    font-size: clamp(1.2rem, 3.5vw, 1.6rem);
+    outline: none;
+    text-align: right;
+    letter-spacing: .5px;
+    caret-color: var(--text);
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum" 1;
+}
+
+/* layout */
+.calc__grid{
+    display:grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap:.5rem;
+    align-items:stretch;
+}
+
+.calc__nums{
+    grid-column: 1 / span 3;
+    display:grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap:.5rem;
+    /* all buttons same height */
+    grid-auto-rows: clamp(48px, 8vw, 64px);
+}
+
+.calc__row{ display: contents; }
+
+.calc__ops{
+    grid-column: 4;
+    display:grid;
+    gap:.5rem;
+    grid-auto-rows: clamp(48px, 8vw, 64px);
+}
+
+.btn {
+    appearance: none;
+    border: 1px solid rgba(255,255,255,.08);
+    background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+    color: var(--text);
+    border-radius: 12px;
+    padding: .9rem;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: transform .06s ease, box-shadow .15s ease, border-color .15s ease;
+    /* to have aspect ratio on the buttons */
+    /* aspect-ratio: 1 / 1; */
+}
+
+
+/* focus accessible */
+.btn:focus { outline: none; }
+.btn:focus-visible {
+    box-shadow: 0 0 0 4px var(--ring);
+}
+
+.btn:active {
+    transform: translateY(0);
+    box-shadow: 0 3px 8px rgba(0,0,0,.25);
+}
+
+.btn:disabled {
+    opacity: .5;
+    cursor: not-allowed;
+    filter: grayscale(.3);
+}
+
+.btn--op {
+    background: linear-gradient(180deg, rgba(34,211,238,.25), rgba(34,211,238,.1));
+    border-color: rgba(34,211,238,.35);
+}
+
+.btn--util {
+    color: var(--muted);
+    background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.01));
+}
+
+.btn--equals{
+    grid-column: 1 / span 3;
+    font-weight: 700;
+}
+
+/* hover only if mouse */
+@media (hover:hover) {
+    .btn:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 6px 14px rgba(0,0,0,.25);
+        border-color: rgba(255,255,255,.18);
+    }
+}
+
+/* reduce motion */
+@media (prefers-reduced-motion: reduce) {
+    .btn {
+        transition: none !important;
+    }
+}
