@@ -1,0 +1,28 @@
+{
+  "name": "tdd-frontend",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "vitest",
+    "coverage": "vitest run --coverage"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/luisgj7/TDD-Frontend.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/luisgj7/TDD-Frontend/issues"
+  },
+  "homepage": "https://github.com/luisgj7/TDD-Frontend#readme",
+  "description": "",
+  "devDependencies": {
+    "semistandard": " 17.0.0",
+    "vitest": "3.2.4"
+  },
+  "eslintConfig": {
+    "extends": "./node_modules/semistandard/eslintrc.json"
+  }
+}
