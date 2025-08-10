@@ -105,4 +105,24 @@ describe("innerJoin", () => {
         );
     });
 
+    it("returns merged objects only for matching id key for the value 1)", () => {
+        const res = innerJoin({
+            leftArray,
+            rightArray,
+            key: "id",
+        });
+        expect(res).toEqual(
+            expect.arrayContaining([
+                expect.objectContaining({
+                    id: 1,
+                    name: "Elizabeth",
+                    age: 61,
+                    phone: "+145454",
+                    email: "elizabeth@notreal.com",
+                    confirmed: false,
+                }),
+            ])
+        );
+    });
+
 })
