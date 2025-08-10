@@ -1,12 +1,6 @@
 import { describe, expect, it } from "vitest";
+import { fizzbuzz } from "../src/fizzbuzz";
 
-/*
-* Write a function that, given a number:
-*  - Returns "fizz" if it is a multiple of 3
-*  - Returns "buzz" if it is a multiple of 5
-*  - Returns "fizzbuzz" if it is a multiple of both 3 and 5
-*  - Returns the number itself if it is not a multiple of either
-*/
 export const fizzbuzz = (number) => {
     if (typeof number !== 'number') throw new Error("parameter provided must be a number");
     if (Number.isNaN(number)) throw new Error("parameter provided must be a number");
