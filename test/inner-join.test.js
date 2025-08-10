@@ -31,11 +31,32 @@ const rightArray = [
 ];
 
 const innerJoin = ({leftArray, rightArray}) => {
+    // Validate leftArray
+    if (!Array.isArray(leftArray)) {
+        throw new TypeError("leftArray must be a valid array");
+    }
+
+    // Validate rightArray
+    if (!Array.isArray(rightArray)) {
+        throw new TypeError("rightArray must be a valid array");
+    }
+
+    // Validate key
+    if (typeof key !== "string" || key.trim() === "") {
+        throw new TypeError("key must be a non-empty string");
+    }
 
 };
 
 describe("innerJoin", () => {
     it('should be a function', () => {
         expect(typeof innerJoin).toBe('function');
+    });
+
+    it("throws on invalid inputs", () => {
+        expect(() => innerJoin({ leftArray: null, rightArray, key: "id" })).toThrow();
+        expect(() => innerJoin({ leftArray, rightArray: undefined, key: "id" })).toThrow();
+        expect(() => innerJoin({ leftArray, rightArray, key: 123 })).toThrow();
+        expect(() => innerJoin({ leftArray, rightArray, key: "" })).toThrow();
     });
 })
