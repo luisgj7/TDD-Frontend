@@ -46,21 +46,28 @@ const innerJoin = ({leftArray, rightArray, key}) => {
         throw new TypeError("key must be a non-empty string");
     }
 
-    const hasLeftArrayKey = leftArray.every((left) => Object.hasOwnProperty.call(left, key));
-    const hasRightArrayKey = rightArray.every((right) => Object.hasOwnProperty.call(right, key));
+    const hasLeftArrayKey = leftArray.some((left) => Object.hasOwnProperty.call(left, key));
+    const hasRightArrayKey = rightArray.some((right) => Object.hasOwnProperty.call(right, key));
 
     if (!hasLeftArrayKey || !hasRightArrayKey) {
         return [];
     }
 
-   return [{
-       id: 0,
-       name: "Maggie",
-       age: 14,
-       phone: "+123456",
-       email: "maggie@notreal.com",
-       confirmed: true,
-   }]
+    const leftMap = new Map(
+        leftArray
+            .filter(Boolean)
+            .map(item => [item[key], item])
+    );
+
+    return rightArray
+        .filter(Boolean)
+        .reduce((acc, rightItem) => {
+            const leftItem = leftMap.get(rightItem[key]);
+            if (leftItem) {
+                acc.push({ ...leftItem, ...rightItem });
+            }
+            return acc;
+        }, []);
 
 };
 
@@ -123,6 +130,13 @@ describe("innerJoin", () => {
                 }),
             ])
         );
+    });
+
+    it("ignores items missing the join key", () => {
+        const l = [{ id: 1, a: 1 }, { a: 2 }]; // second item missing id
+        const r = [{ id: 1, b: 1 }];
+        const res = innerJoin({ leftArray: l, rightArray: r, key: "id" });
+        expect(res).toEqual([{ id: 1, a: 1, b: 1 }]);
     });
 
 })
