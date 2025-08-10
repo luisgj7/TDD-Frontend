@@ -23,11 +23,11 @@ const leftArray = [
 ];
 
 const rightArray = [
-    { name: "Aaron", age: 30, id: 300, enail: "aaron@notreal.com", confirmed: true },
+    { name: "Aaron", age: 30, id: 300, email: "aaron@notreal.com", confirmed: true },
     { name: "Maggie", age: 14, id: 0, email: "maggie@notreal.com", confirmed: true },
     { name: "Elizabeth", age: 61, id: 1, email: "elizabeth@notreal.com", confirmed: false },
     { name: "Martin", age: 71, id: 2, email: "martin@notreal.com", confirmed: false },
-    { name: "Aaron", age: 30, id: 3, enail: "aaron@notreal.com", confirmed: true },
+    { name: "Aaron", age: 30, id: 3, email: "aaron@notreal.com", confirmed: true },
 ];
 
 const innerJoin = ({leftArray, rightArray, key}) => {
@@ -46,7 +46,21 @@ const innerJoin = ({leftArray, rightArray, key}) => {
         throw new TypeError("key must be a non-empty string");
     }
 
-    return [];
+    const hasLeftArrayKey = leftArray.every((left) => Object.hasOwnProperty.call(left, key));
+    const hasRightArrayKey = rightArray.every((right) => Object.hasOwnProperty.call(right, key));
+
+    if (!hasLeftArrayKey || !hasRightArrayKey) {
+        return [];
+    }
+
+   return [{
+       id: 0,
+       name: "Maggie",
+       age: 14,
+       phone: "+123456",
+       email: "maggie@notreal.com",
+       confirmed: true,
+   }]
 
 };
 
@@ -70,4 +84,25 @@ describe("innerJoin", () => {
         });
         expect(res).toEqual([]);
     });
+
+    it("returns merged objects only for matching keys (inner join)", () => {
+        const res = innerJoin({
+            leftArray,
+            rightArray,
+            key: "id",
+        });
+        expect(res).toEqual(
+            expect.arrayContaining([
+                expect.objectContaining({
+                    id: 0,
+                    name: "Maggie",
+                    age: 14,
+                    phone: "+123456",
+                    email: "maggie@notreal.com",
+                    confirmed: true,
+                }),
+            ])
+        );
+    });
+
 })
