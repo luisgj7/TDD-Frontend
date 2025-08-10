@@ -1,3 +1,4 @@
+import { describe, expect, it } from "vitest";
 /*
 * Implement the `innerJoin` function.
 *
@@ -29,3 +30,12 @@ const rightArray = [
     { name: "Aaron", age: 30, id: 3, enail: "aaron@notreal.com", confirmed: true },
 ];
 
+const innerJoin = ({leftArray, rightArray}) => {
+
+};
+
+describe("innerJoin", () => {
+    it('should be a function', () => {
+        expect(typeof innerJoin).toBe('function');
+    });
+})
